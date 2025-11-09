@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>김민수 · Software Engineer</title>
+  <style>
+    :root {
+      color-scheme: dark light;
+      --bg: #0f172a;
+      --bg-soft: rgba(15, 23, 42, 0.92);
+      --panel: rgba(15, 23, 42, 0.72);
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.12);
+      --border: rgba(56, 189, 248, 0.3);
+      --shadow: 0 32px 60px rgba(15, 23, 42, 0.55);
+      --radius: 18px;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f8fafc;
+        --bg-soft: rgba(248, 250, 252, 0.92);
+        --panel: rgba(255, 255, 255, 0.85);
+        --text: #0f172a;
+        --muted: #475569;
+        --accent: #0284c7;
+        --accent-soft: rgba(2, 132, 199, 0.08);
+        --border: rgba(2, 132, 199, 0.24);
+        --shadow: 0 24px 48px rgba(15, 23, 42, 0.12);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', 'SUIT', 'Noto Sans KR', AppleSDGothicNeo, sans-serif;
+      background:
+        radial-gradient(1200px circle at -10% -20%, rgba(56, 189, 248, 0.22), transparent 45%),
+        radial-gradient(900px circle at 110% 10%, rgba(168, 85, 247, 0.18), transparent 50%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: clamp(32px, 5vw, 72px) clamp(20px, 6vw, 96px);
+      display: flex;
+      justify-content: center;
+    }
+
+    .canvas {
+      width: min(1180px, 100%);
+      display: grid;
+      grid-template-columns: minmax(280px, 1fr) minmax(0, 2fr);
+      gap: clamp(32px, 5vw, 64px);
+    }
+
+    aside {
+      position: sticky;
+      top: clamp(24px, 5vh, 64px);
+      height: fit-content;
+      padding: 36px 32px;
+      border-radius: var(--radius);
+      background: var(--panel);
+      backdrop-filter: blur(24px);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 28px;
+    }
+
+    .avatar {
+      position: relative;
+      width: clamp(140px, 40vw, 180px);
+      aspect-ratio: 1 / 1;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 24px 48px rgba(15, 23, 42, 0.4);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    .avatar::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 25%, rgba(56, 189, 248, 0.18), transparent 60%);
+      pointer-events: none;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background-color: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.88rem;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 3.2vw, 3.4rem);
+      letter-spacing: -1px;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .quick-meta {
+      display: grid;
+      gap: 10px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    nav ul {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+    }
+
+    nav a {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 14px;
+      border-radius: 10px;
+      color: inherit;
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+    }
+
+    nav a::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--muted);
+      opacity: 0.4;
+      transition: transform 160ms ease, background 160ms ease, opacity 160ms ease;
+    }
+
+    nav a:is(:hover, :focus-visible) {
+      background: var(--accent-soft);
+      color: var(--accent);
+      transform: translateX(4px);
+    }
+
+    nav a:is(:hover, :focus-visible)::before {
+      background: var(--accent);
+      opacity: 0.85;
+      transform: scale(1.6);
+    }
+
+    nav a.active {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(129, 140, 248, 0.14));
+      color: var(--accent);
+    }
+
+    nav a.active::before {
+      background: var(--accent);
+      opacity: 1;
+      transform: scale(2.2);
+    }
+
+    main {
+      display: grid;
+      gap: clamp(32px, 4vw, 48px);
+    }
+
+    section {
+      background: var(--bg-soft);
+      border-radius: var(--radius);
+      padding: clamp(28px, 3vw, 40px);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    section::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(260px circle at 30% 10%, rgba(56, 189, 248, 0.12), transparent 60%);
+      opacity: 0;
+      transition: opacity 200ms ease;
+      pointer-events: none;
+    }
+
+    section:hover::after {
+      opacity: 1;
+    }
+
+    section header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    section header .icon {
+      font-size: 1.5rem;
+    }
+
+    section header h2 {
+      font-size: 1.45rem;
+      letter-spacing: -0.5px;
+    }
+
+    section p {
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    section p:last-child {
+      margin-bottom: 0;
+    }
+
+    ul.feature-list {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+    }
+
+    ul.feature-list li {
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: rgba(148, 163, 184, 0.1);
+      color: var(--text);
+      font-size: 0.98rem;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 28px;
+      display: grid;
+      gap: 24px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 6px;
+      bottom: 6px;
+      left: 10px;
+      width: 2px;
+      background: linear-gradient(180deg, rgba(56, 189, 248, 0.6), rgba(129, 140, 248, 0.2));
+    }
+
+    .timeline-card {
+      position: relative;
+      padding: 18px 20px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.76);
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.65);
+    }
+
+    .timeline-card::before {
+      content: "";
+      position: absolute;
+      top: 18px;
+      left: -22px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 0 6px rgba(56, 189, 248, 0.15);
+    }
+
+    .timeline-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+    }
+
+    .timeline-card span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent);
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .quote {
+      font-style: italic;
+      font-weight: 600;
+      color: var(--accent);
+      border-left: 4px solid rgba(56, 189, 248, 0.6);
+      padding-left: 18px;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      margin-top: clamp(32px, 5vh, 64px);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 960px) {
+      .canvas {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        position: initial;
+        order: -1;
+      }
+
+      .avatar {
+        margin: 0 auto;
+      }
+    }
+
+    @media (max-width: 560px) {
+      body {
+        padding: 32px 18px 48px;
+      }
+
+      aside {
+        padding: 28px 24px;
+      }
+
+      section {
+        padding: 24px 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="canvas">
+    <aside>
+      <figure class="avatar">
+        <img src="P.png" alt="김민수 프로필" loading="lazy">
+      </figure>
+      <span class="badge">Software Engineer · 김민수</span>
+      <h1>사용자에게 가치를 전하는 개발자</h1>
+      <p class="subtitle">클라우드와 웹 기술로 사람들의 일상과 비즈니스를 더 나은 방향으로 바꾸는 데 집중합니다.</p>
+      <div class="quick-meta">
+        <span>📍 서울, 대한민국</span>
+        <span>💼 2년차 풀스택 웹 개발 경험</span>
+        <span>📚 꾸준한 학습 · 사이드 프로젝트 애호가</span>
+      </div>
+      <nav aria-label="섹션 바로가기">
+        <ul>
+          <li><a href="#motivation" class="active">지원 동기 및 포부</a></li>
+          <li><a href="#personality">성격의 장단점</a></li>
+          <li><a href="#motto">생활신조</a></li>
+          <li><a href="#experience">경험 및 특이사항</a></li>
+          <li><a href="#vision">입사 후 포부</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+      <section id="motivation" data-section>
+        <header>
+          <span class="icon" aria-hidden="true">🚀</span>
+          <h2>지원 동기 및 포부</h2>
+        </header>
+        <p>안녕하세요. 소프트웨어 개발자로서 사용자에게 가치 있는 서비스를 제공하고 싶은 김민수입니다. 대학에서 컴퓨터공학을 전공하며 기본기를 다졌고, 졸업 후 2년간 스타트업에서 웹 개발 업무를 담당했습니다.</p>
+        <p>빠르게 변화하는 IT 업계에서 새로운 기술을 학습하고 적용하는 일에 큰 흥미를 느낍니다. 특히 사용자 경험을 개선하는 기술적 솔루션을 찾을 때 가장 큰 보람을 느낍니다.</p>
+        <p>혁신적인 기술력과 개발 문화를 갖춘 귀사에서 저의 역량을 더욱 성장시키고 의미 있는 프로젝트에 기여하고 싶습니다.</p>
+      </section>
+
+      <section id="personality" data-section>
+        <header>
+          <span class="icon" aria-hidden="true">🧭</span>
+          <h2>성격의 장단점</h2>
+        </header>
+        <ul class="feature-list">
+          <li><strong>꾸준한 학습 의지</strong><br>새로운 기술 트렌드에 관심이 많아 온라인 강의와 사이드 프로젝트를 통해 지식을 확장합니다.</li>
+          <li><strong>협업과 소통</strong><br>다양한 직군과 제대로 소통하며 공동의 목표를 달성하는 것을 중요하게 생각합니다.</li>
+          <li><strong>문제 해결 지향</strong><br>복잡한 버그나 기술적 이슈에도 포기하지 않고 다양한 접근을 시도해 해결책을 찾아갑니다.</li>
+          <li><strong>완벽주의 개선 노력</strong><br>높은 완성도를 추구하면서도 일정 준수를 위해 우선순위를 명확히 세우는 연습을 지속하고 있습니다.</li>
+        </ul>
+      </section>
+
+      <section id="motto" data-section>
+        <header>
+          <span class="icon" aria-hidden="true">💡</span>
+          <h2>생활신조</h2>
+        </header>
+        <p class="quote">“기술은 사람을 위해 존재한다.”</p>
+        <p>개발자로서 항상 사용자의 관점에서 생각하며, 기술이 실질적인 가치와 도움을 제공해야 의미가 있다고 믿습니다. 사용자의 효율성과 편의성을 높이는 것이 제 일의 출발점입니다.</p>
+      </section>
+
+      <section id="experience" data-section>
+        <header>
+          <span class="icon" aria-hidden="true">🏆</span>
+          <h2>학창시절 경험 및 특이사항</h2>
+        </header>
+        <div class="timeline">
+          <article class="timeline-card">
+            <span>대학교 3학년 · 교내 해커톤</span>
+            <h3>지역 상권 활성화 앱 개발 · 우수상</h3>
+            <p>React Native로 48시간 만에 MVP를 완성하고, 백엔드 API 설계부터 프런트엔드 구현까지 전 과정을 리드했습니다.</p>
+            <p>팀장으로서 5명의 팀원 역량을 파악하고 긴박한 일정 속에서도 효율적으로 역할을 분배해 프로젝트를 완수했습니다.</p>
+          </article>
+          <article class="timeline-card">
+            <span>컴퓨터공학과 학회 활동</span>
+            <h3>멘토링 · 커뮤니티 리더십</h3>
+            <p>4년간 학회에서 후배들에게 프로그래밍을 가르치며 복잡한 개념을 쉽게 전달하는 능력을 키웠고, 이는 현재 코드 리뷰와 기술 공유에서도 큰 자산이 되고 있습니다.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="vision" data-section>
+        <header>
+          <span class="icon" aria-hidden="true">🌱</span>
+          <h2>입사 후 포부</h2>
+        </header>
+        <p>입사 직후에는 귀사의 개발 문화와 코딩 컨벤션에 신속히 적응해 팀에 자연스럽게 녹아들겠습니다.</p>
+        <p>단기적으로는 맡은 업무를 성실히 수행하며 비즈니스 도메인 이해도를 높이고, 팀과의 협업을 통해 개발 실력을 지속적으로 향상시키겠습니다.</p>
+        <p>중장기적으로는 기술 리더로 성장하여 주니어 개발자 멘토링과 프로세스 개선에 기여하고 싶습니다. 특히 클라우드 및 마이크로서비스 아키텍처 전문성을 강화해 서비스 확장성과 안정성을 높이겠습니다.</p>
+        <p>궁극적으로는 사용자에게 진정한 가치를 제공하는 혁신 서비스를 만들어 귀사와 함께 성장하는 개발자가 되고 싶습니다.</p>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    © 2025 김민수 · 사용자 중심 개발을 향한 여정
+  </footer>
+
+  <script>
+    (function () {
+      const links = document.querySelectorAll('nav a');
+      const sections = document.querySelectorAll('[data-section]');
+
+      function setActive(id) {
+        links.forEach((link) => {
+          const target = link.getAttribute('href').slice(1);
+          link.classList.toggle('active', target === id);
+        });
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActive(entry.target.id);
+            history.replaceState(undefined, '', `#${entry.target.id}`);
+          }
+        });
+      }, {
+        rootMargin: '-40% 0px -50% 0px',
+        threshold: [0.25, 0.6]
+      });
+
+      sections.forEach((section) => observer.observe(section));
+
+      links.forEach((link) => {
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+          const targetId = link.getAttribute('href').slice(1);
+          const target = document.getElementById(targetId);
+          if (target) {
+            window.scrollTo({
+              top: target.offsetTop - 24,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+
+      if (location.hash) {
+        const initial = document.getElementById(location.hash.substring(1));
+        if (initial) {
+          setTimeout(() => {
+            window.scrollTo({
+              top: initial.offsetTop - 24,
+              behavior: 'smooth'
+            });
+          }, 120);
+        }
+      }
+    }());
+  </script>
+</body>
+</html>
